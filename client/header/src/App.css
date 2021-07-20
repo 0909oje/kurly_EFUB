@@ -17,3 +17,15 @@
 .viewAll {
   font-size: 18px;
 }
+
+.Goods{
+  position: relative;
+  padding-bottom: 56.25%;
+  height:0;
+}
+
+.EventImage{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}

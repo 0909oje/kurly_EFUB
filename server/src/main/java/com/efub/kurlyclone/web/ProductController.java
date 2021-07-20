@@ -62,8 +62,8 @@ public class ProductController {
         return productService.getSale();
     }
 
-    @GetMapping("/md_choice")
-    public List<Product> getMdChoice(@RequestBody String cat) {
-        return productService.getMdChoice(cat);
+    @GetMapping("/md_choice/{category_name}")
+    public List<Product> getMdChoice(@PathVariable String category_name) {
+        return productService.getMdChoice(category_name);
     }
 }

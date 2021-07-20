@@ -1,10 +1,14 @@
 import React from 'react';
+import './product.css';
 import styled from "styled-components";
-import image from '../image 24.svg'
+import { useState, useEffect } from "react";
+import axios from 'axios';
+
+const GoodsList = styled.div`
+    margin-right: 18px; 
+`
 
 const Image = styled.div`
-  width: 212px;
-  height: 272px;
   margin-bottom: 16px;
 `
 
@@ -15,6 +19,7 @@ const GoodsDetail = styled.div`
 const Name = styled.div`
     font-size: 13px;
     margin-bottom: 5px;
+    width: 212px;
 `
 const SalePrice = styled.div`
     font-size: 14px;
@@ -41,18 +46,50 @@ const Cost = styled.div`
     color: #999999;
 `
 
-function Product() {
+function Product({path}) {
+    const [data, product] = useState();
+    useEffect(async () => {
+            try {
+                const response = await axios.get(path);
+                product(response.data);
+            } catch (e) {
+                console.log(e)
+            }
+        }, []
+    )
+
     return (
-        <div>
-            <Image><img src={image} /></Image>
-            <GoodsDetail>
-                <Name>[콜린스그린] 더 자몽</Name>
-                <SalePrice>
-                    <DC>13%</DC>
-                    <Price>14,442원</Price>
-                </SalePrice>
-                <Cost>16,600원</Cost>
-            </GoodsDetail>
+        <div style={{"display": "inline-flex", "flex-direction": "row", "justify-content": "center"}}>
+            {data?.map((product, i) => {
+                if (i <= 3)
+                return(
+                    <GoodsList>
+                        <Image><img className="productImg" src={"http://localhost:8080/"+product.product_image} /></Image>
+                        <GoodsDetail>
+                            <Name>{product.product_name}</Name>
+                                {(()=>{
+                                        if(product.sale!==0.0){
+                                            return (
+                                                <div>
+                                                <SalePrice>
+                                                <DC>{(product.sale*100).toFixed()}%</DC>
+                                                <Price>{Math.floor(product.product_price * product.sale)}원</Price>
+                                                </SalePrice>
+                                                <Cost>{product.product_price}</Cost>
+                                                </div>
+                                            )
+                                        } else {
+                                            return(
+                                                <SalePrice>
+                                                <Price>{product.product_price}원</Price>
+                                                </SalePrice>
+                                            )
+                                        }
+                                    })()}
+                        </GoodsDetail>
+                    </GoodsList>);
+                }
+            )}
         </div>
 
 );
